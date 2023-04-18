@@ -6,33 +6,16 @@ import {OpenAIEmbeddings} from 'langchain/embeddings/openai';
 import { RecursiveCharacterTextSplitter, TextSplitter } from "langchain/text_splitter";
 import * as fs from 'fs';
 import * as dotenv from 'dotenv';
-import { MongoClient } from "mongodb";
-import mongoose  from "mongoose";
 import cors from "cors";
 
 const textFilePath = 'file.txt';
 const fileContent = fs.readFileSync(textFilePath, 'utf-8');
-
-const url = 'mongodb://127.0.0.1:27017'; 
-const dbName = 'files'; 
-const collectionName = 'data'; 
-const doc = {content: fileContent}
 
 const app = express();
 dotenv.config();
 
 app.use(express.json());
 
-    mongoose.connect(url,{useNewUrlParser:true, useUnifiedTopology:true}).then((data)=>{
-        console.log("connected to mongodb successfully !");
-        console.log(`mongodb connected with server : ${data.connection.host}`);
-        const db = data.connection.db;
-        const collection = db.collection('data');
-        collection.insertOne(doc, function(err, result) {
-            if (err) throw err;
-            console.log('Text file inserted successfully:');
-          });
-    })
 
 // Define route for receiving question data from frontend
 app.use(cors());
